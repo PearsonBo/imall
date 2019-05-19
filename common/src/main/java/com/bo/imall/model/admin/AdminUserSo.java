@@ -1,6 +1,6 @@
 package com.bo.imall.model.admin;
 
-import com.bo.imall.model.common.AbstractBo;
+import com.bo.imall.model.common.AbstractSo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AdminUser extends AbstractBo {
+public class AdminUserSo extends AbstractSo {
 
     @ApiModelProperty(name = "名称")
     private String username;

@@ -1,0 +1,27 @@
+server:
+  port: 9091
+
+spring:
+  profiles:
+    include: permission,redis,mybatis
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/imall?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 111111
+  dubbo:
+    application.name: sso-provider
+    registry:
+      address: zookeeper://47.105.33.217:2181
+    protocol:
+      name: dubbo
+      port: 20880
+      host: local.dasouche.net
+    scan: com.bo.imall
+
+logging:
+  level:
+    org:
+      springframework:
+        data: DEBUG
+    com.bo.imall.mapper: debug

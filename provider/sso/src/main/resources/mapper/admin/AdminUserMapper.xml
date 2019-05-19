@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bo.imall.mapper.admin.AdminUserMapper">
+
+    <!-- resultMap begin -->
+    <resultMap type="com.bo.imall.model.admin.AdminUser" id="AdminUserResultMap">
+        <!-- 0 -->
+        <result property="id" column="id"/>
+        <!-- 1 -->
+        <result property="lockVersion" column="lock_version"/>
+        <!-- 2 -->
+        <result property="username" column="username"/>
+        <!-- 3 -->
+        <result property="password" column="password"/>
+        <!-- 4 -->
+        <result property="loginNum" column="login_num"/>
+        <!-- 5 -->
+        <result property="lastLoginTime" column="last_login_time"/>
+
+    </resultMap>
+
+    <resultMap type="com.bo.imall.model.admin.AdminUserVo" id="AdminUserVoResultMap">
+        <!-- 0 -->
+        <result property="id" column="id"/>
+        <!-- 1 -->
+        <result property="lockVersion" column="lock_version"/>
+        <!-- 2 -->
+        <result property="username" column="username"/>
+        <!-- 3 -->
+        <result property="password" column="password"/>
+        <!-- 4 -->
+        <result property="loginNum" column="login_num"/>
+        <!-- 5 -->
+        <result property="lastLoginTime" column="last_login_time"/>
+
+    </resultMap>
+    <!-- resultMap end -->
+
+    <!-- CRUD begin -->
+    <insert id="insert">
+        insert into t_admin_user(
+        <!-- 0 -->id,
+        <!-- 1 -->lock_version,
+        <!-- 2 -->username,
+        <!-- 3 -->password,
+        <!-- 4 -->login_num,
+        <!-- 5 -->last_login_time
+        )
+        values(
+        <!-- 0 -->#{id},
+        <!-- 1 -->#{lockVersion},
+        <!-- 2 -->#{username},
+        <!-- 3 -->#{password},
+        <!-- 4 -->#{loginNum},
+        <!-- 5 -->#{lastLoginTime}
+        )
+
+    </insert>
+
+    <insert id="batchInsert">
+        insert into t_admin_user(
+        <!-- 0 -->id,
+        <!-- 1 -->lock_version,
+        <!-- 2 -->username,
+        <!-- 3 -->password,
+        <!-- 4 -->login_num,
+        <!-- 5 -->last_login_time
+        )
+        SELECT t_admin_user_seq.NEXTVAL,A.* FROM (
+        <foreach collection="list" item="item" index="index" separator="union all">
+            SELECT
+            <!-- 0 -->#{item.lockVersion},
+            <!-- 1 -->#{item.username},
+            <!-- 2 -->#{item.password},
+            <!-- 3 -->#{item.loginNum},
+            <!-- 4 -->#{item.lastLoginTime}
+            FROM DUAL
+        </foreach>
+        ) A
+    </insert>
+
+    <update id="update">
+        update t_admin_user
+        <include refid="updateSetSql"/>
+        where id=#{id} and lock_version=#{lockVersion}
+    </update>
+
+    <sql id="updateSetSql">
+        <set>
+            <!-- 0 -->lock_version=#{lockVersion}+1,
+            <if test="username!=null and username!='' ">
+                <!-- 1 -->username=#{username},
+            </if>
+            <if test="password!=null and password!='' ">
+                <!-- 2 -->password=#{password},
+            </if>
+            <if test="loginNum !=null ">
+                <!-- 3 -->login_num=#{loginNum},
+            </if>
+            <if test="lastLoginTime !=null ">
+                <!-- 4 -->last_login_time=#{lastLoginTime}
+            </if>
+
+        </set>
+    </sql>
+
+    <delete id="delete">
+        delete from t_admin_user where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from t_admin_user t where t.id in
+        <foreach collection="list" index="dex" item="item" open="("
+                 close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="findBo" resultMap="AdminUserResultMap">
+        select * from t_admin_user where id
+        = #{id}
+    </select>
+
+    <select id="findVo" resultMap="AdminUserVoResultMap">
+        select * from t_admin_user where
+        id = #{id}
+    </select>
+
+    <select id="listBoBySo" resultMap="AdminUserResultMap">
+        select t.* from t_admin_user t
+        <include refid="soSqlFilter"/>
+        order by id desc
+    </select>
+
+    <select id="listIdBySo" resultType="long">
+        select t.id from t_admin_user t
+        <include refid="soSqlFilter"/>
+    </select>
+
+    <select id="listVoBySo" resultMap="AdminUserVoResultMap">
+        select t.* from t_admin_user t
+        <include refid="soSqlFilter"/>
+        order by id desc
+    </select>
+
+    <select id="countBySo" resultType="int">
+        select count(1) from t_admin_user t
+        <include refid="soSqlFilter"/>
+    </select>
+
+    <select id="listVoByIdList" resultMap="AdminUserVoResultMap">
+        select * from t_admin_user t where t.id in
+        <foreach collection="list" index="dex" item="item" open="("
+                 close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="listBoByIdList" resultMap="AdminUserResultMap">
+        select * from t_admin_user t where t.id in
+        <foreach collection="list" index="dex" item="item" open="("
+                 close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <sql id="soSqlFilter">
+        <where>
+            <include refid="soSqlFilterRef"/>
+            <if test="id !=null ">
+                and t.id = #{id}
+            </if>
+            <if test="username !=null and username !='' ">
+                and t.username = #{username}
+            </if>
+            <if test="password !=null and password !='' ">
+                and t.password = #{password}
+            </if>
+            <if test="loginNum !=null ">
+                and t.login_num = #{loginNum}
+            </if>
+            <if test="lastLoginTime !=null ">
+                and t.last_login_time = #{lastLoginTime}
+            </if>
+            <if test="idList !=null and idList.size() > 0 ">
+                and t.id in
+                <foreach collection="idList" index="dex" item="item" open="("
+                         close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+
+        </where>
+    </sql>
+    <!-- CRUD end -->
+
+    <!-- business begin -->
+    <sql id="soSqlFilterRef">
+    </sql>
+    <!-- business end -->
+</mapper>
