@@ -63,13 +63,6 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!--kaptcha begin-->
-        <dependency>
-            <groupId>com.google.code</groupId>
-            <artifactId>kaptcha</artifactId>
-            <version>${google.kaptcha.version}</version>
-        </dependency>
-        <!--kaptcha end-->
     </dependencies>
 
 </project>

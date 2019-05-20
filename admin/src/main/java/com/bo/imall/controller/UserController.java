@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: 2019/5/19 0019 下午 15:29
  */
 @RestController
-@Api(description = "后台管理员相关接口")
+@Api(value = "后台管理员相关接口")
 @Slf4j
 public class UserController {
 

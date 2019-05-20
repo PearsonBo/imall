@@ -1,18 +1,11 @@
 server:
-  port: 9089
+  port: 8082
 
 spring:
   profiles:
-    include: dubbo,permission,redis,mybatis
+    include: dubbo
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/imall?useUnicode=true&characterEncoding=utf-8
     username: root
     password: 111111
-
-logging:
-  level:
-    org:
-      springframework:
-        data: DEBUG
-    com.bo.imall.mapper: debug

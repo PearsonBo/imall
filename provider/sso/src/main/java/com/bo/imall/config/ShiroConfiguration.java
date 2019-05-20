@@ -2,16 +2,12 @@ package com.bo.imall.config;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.bo.imall.filter.AjaxUserFilter;
-import com.bo.imall.filter.CaptchaValidateFilter;
 import com.bo.imall.filter.MyPermissionsAuthorizationFilter;
 import com.bo.imall.model.CommonPermission;
 import com.bo.imall.model.PermissionInfo;
 import com.bo.imall.model.SpecificPermission;
 import com.bo.imall.relam.LdapAndDbCredentialMatcher;
 import com.bo.imall.relam.UserLdapAndDbRealm;
-import com.google.code.kaptcha.Producer;
-import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.google.code.kaptcha.util.Config;
 import lombok.Data;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.CacheManager;
@@ -37,12 +33,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author Administrator
@@ -199,21 +193,6 @@ public class ShiroConfiguration {
         return registration;
     }
 
-    @Bean
-    @Order(Integer.MAX_VALUE)
-    public CaptchaValidateFilter getCaptchaValidateFilter() {
-        CaptchaValidateFilter captchaValidateFilter = new CaptchaValidateFilter();
-        captchaValidateFilter.setCaptchaEnabled(true);
-        captchaValidateFilter.setCaptchaParam("kaptcha");
-        return captchaValidateFilter;
-    }
-
-    @Bean
-    public FilterRegistrationBean ajaxCaptchaValidateFilterRegistration(CaptchaValidateFilter captchaValidateFilter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean(captchaValidateFilter);
-        registration.setEnabled(false);
-        return registration;
-    }
 
     public LogoutFilter getLogoutFilter() {
         LogoutFilter logoutFilter = new LogoutFilter();
@@ -244,13 +223,11 @@ public class ShiroConfiguration {
         filters.put("user", getAjaxUserFilter());
         filters.put("logout", getLogoutFilter());
         filters.put("perms", getMyPermissionsAuthorizationFilter());
-        filters.put("captchaValidate", getCaptchaValidateFilter());
         shiroFilter.setFilters(filters);
 
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/resources/**", "anon");
         filterChainDefinitionMap.put("/web/user/logout", "logout");
-        filterChainDefinitionMap.put("/web/user/ajaxLogin", "captchaValidate");
         filterChainDefinitionMap.put("/web/user/**", "anon");
 
         if (permissionInfo != null) {
@@ -318,17 +295,4 @@ public class ShiroConfiguration {
         return registration;
     }
 
-    @Bean
-    public Producer captchaProducer() {
-        DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
-        Properties properties = new Properties();
-        properties.setProperty("kaptcha.image.width", "100");
-        properties.setProperty("kaptcha.image.height", "50");
-        properties.setProperty("kaptcha.noise.impl", "com.google.code.kaptcha.impl.NoNoise");
-        properties.setProperty("kaptcha.textproducer.char.string", "23456789abcdefghijkmnpqrstuvwxyz");
-        properties.setProperty("kaptcha.textproducer.char.length", "4");
-        Config config = new Config(properties);
-        defaultKaptcha.setConfig(config);
-        return defaultKaptcha;
-    }
 }
