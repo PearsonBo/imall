@@ -1,12 +1,9 @@
 spring:
   dubbo:
-    application.name: consumer-test
+    application:
+      name: consumer-test
     registry:
       address: zookeeper://47.105.33.217:2181
-    protocol:
-      name: dubbo
-      port: 20880
-      host: local.dasouche.net
     scan: com.bo.imall
     consumer:
       filter: hystrix
