@@ -1,6 +1,9 @@
 package com.bo.imall.service;
 
 
+import com.alibaba.dubbo.doc.annotation.InterfaceDesc;
+import com.alibaba.dubbo.doc.annotation.MethodDesc;
+import com.alibaba.dubbo.doc.annotation.MethodParamDesc;
 import com.bo.imall.model.admin.AdminUser;
 
 /**
@@ -8,13 +11,19 @@ import com.bo.imall.model.admin.AdminUser;
  *
  * @author bb
  */
+@InterfaceDesc("后台用户登录接口")
 public interface AdminUserService {
 
     /**
      * 注册
      *
-     * @param adminUser
+     * @param adminUser 后台用户
+     * @return
      */
+    @MethodDesc("获取CarId")
+    @MethodParamDesc({
+            "adminUser: 后台用户"
+    })
     void register(AdminUser adminUser);
 
     /**
