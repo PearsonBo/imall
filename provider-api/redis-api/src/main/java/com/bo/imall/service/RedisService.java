@@ -3,10 +3,9 @@ package com.bo.imall.service;
 import com.alibaba.dubbo.doc.annotation.InterfaceDesc;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
- * @Author: PerasonBo
+ * @Author: PearsonBo
  * @Date: 2019-05-21 17:18
  */
 @InterfaceDesc("缓存服务")

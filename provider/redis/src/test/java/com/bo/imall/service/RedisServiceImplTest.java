@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.Serializable;
 
 /**
- * @Author: PerasonBo
+ * @Author: PearsonBo
  * @Date: 2019-05-22 16:43
  */
 @RunWith(SpringRunner.class)
