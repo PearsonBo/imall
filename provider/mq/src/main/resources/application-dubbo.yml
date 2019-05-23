@@ -1,0 +1,1 @@
+spring:  dubbo:    application.name: mq-provider    registry:      address: zookeeper://47.105.33.217:2181    protocol:      name: dubbo      port: 20880    scan: com.bo.imall
