@@ -1,1 +1,1 @@
-spring:  rabbitmq:    host: 47.105.33.217    port: 5672    username: rabbitmq    password: 111111
+spring:  rabbitmq:    host: 47.105.33.217    port: 5672    username: admin    password: 111111
