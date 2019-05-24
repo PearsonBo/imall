@@ -2,7 +2,8 @@ permission:
   permissionInfo:
     commonPermissionList:
       - prefix: /rest/test
+      - prefix: /rest/admin
     specificPermissionList:
-      - url: /rest/go
-        perms: /rest/go
+      - url: /rest/admin/login
+        perms: /rest/admin:login
         roles:

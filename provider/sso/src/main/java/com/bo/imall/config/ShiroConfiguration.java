@@ -179,7 +179,7 @@ public class ShiroConfiguration {
     public ShiroFilterFactoryBean getShiroFilterFactoryBean() {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(getSecurityManager());
-        shiroFilter.setLoginUrl("/web/user/unAuth");
+        shiroFilter.setLoginUrl("/rest/admin/unAuth");
         Map<String, Filter> filters = new LinkedHashMap<>();
         filters.put("authc", getFormAuthenticationFilter());
         filters.put("user", getAjaxUserFilter());

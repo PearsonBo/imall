@@ -7,8 +7,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author: PearsonBo
@@ -24,6 +27,7 @@ public class AdminUserController {
     public static final String REGISTER = "/register";
     public static final String LOGOUT = "/logout";
     public static final String CHANGE_PASSWORD = "/changePassword";
+    public static final String UN_AUTH = "/unAuth";
 
     @Autowired
     private AdminUserServiceSPIAdapter adminUserServiceSPIAdapter;
@@ -58,5 +62,15 @@ public class AdminUserController {
         log.debug("start changePassword..");
         adminUserServiceSPIAdapter.changePassword(adminUser);
         return new PackVo();
+    }
+
+    @GetMapping(value = UN_AUTH)
+    @ApiOperation(value = "没有权限")
+    public PackVo unAuth(HttpServletResponse response) {
+        PackVo<String> packVo = new PackVo<>();
+        packVo.setSuccess(false);
+        packVo.setMessage("惊了！无权限！");
+        response.setStatus(403);
+        return packVo;
     }
 }
