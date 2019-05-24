@@ -96,6 +96,14 @@ public interface BaseDao<T extends AbstractBo>{
     <U extends AbstractVo> U findVo(Long id);
 
     /**
+     * 查询 根据<code>com.best.capital.pay.model.associate.so.AbstractSo</code>查找 <code>com.best.capital.pay.model.associate.vo.AbstractVo</code>的继承对象     *
+     *
+     * @param so 查询条件
+     * @return 查找结果
+     */
+    T findBoBySo(AbstractSo so);
+
+    /**
      * 查询 根据<code>com.best.capital.pay.model.associate.so.AbstractSo</code>查找 <code>com.best.capital.pay.model.associate.vo.AbstractVo</code>的继承对象
      *
      * @param so 查询条件

@@ -147,6 +147,11 @@ public abstract class BaseNoHistoryDaoImpl<T extends AbstractBo> implements Base
         return getMapper().findVo(id);
     }
 
+    @Override
+    public T findBoBySo(AbstractSo so) {
+        return getMapper().findBoBySo(so);
+    }
+
     /**
      * 查询
      *

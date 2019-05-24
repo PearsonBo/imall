@@ -113,4 +113,11 @@ public interface Mapper<T> {
      */
     <U> List<U> listVoByIdList(List<Long> idList);
 
+    /**
+     * 查询
+     *
+     * @param so
+     * @return
+     */
+    T findBoBySo(AbstractSo so);
 }

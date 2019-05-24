@@ -24,9 +24,6 @@ import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -45,15 +42,6 @@ import java.util.Map;
 @ConfigurationProperties("permission")
 @Data
 public class ShiroConfiguration {
-
-    @Value("${spring.redis.host}")
-    private String host;
-
-    @Value("${spring.redis.port}")
-    private Integer port;
-
-    @Value("${spring.redis.password}")
-    private String password;
 
     private PermissionInfo permissionInfo;
 
@@ -97,7 +85,6 @@ public class ShiroConfiguration {
         sessionManager.setGlobalSessionTimeout(1800000);
         sessionManager.setDeleteInvalidSessions(true);
         sessionManager.setSessionValidationSchedulerEnabled(true);
-        sessionManager.setSessionDAO(getRedisSessionDAO());
         sessionManager.setSessionIdCookieEnabled(true);
         sessionManager.setSessionIdCookie(getSimpleCookie());
         return sessionManager;
@@ -125,31 +112,6 @@ public class ShiroConfiguration {
         rememberMeManager.setCipherKey(Base64.decode("GHxH6G3LFh8Zb3NwoRgfFA=="));
         rememberMeManager.setCookie(getRememberMeCookie());
         return rememberMeManager;
-    }
-
-    @Bean(name = "redisManager")
-    public RedisManager getRedisManager() {
-        RedisManager redisManager = new RedisManager();
-        redisManager.setHost(host);
-        redisManager.setPort(port);
-        redisManager.setPassword(password);
-        redisManager.setExpire(1800000);
-        redisManager.setTimeout(1800000);
-        return redisManager;
-    }
-
-    @Bean(name = "redisSessionDAO")
-    public RedisSessionDAO getRedisSessionDAO() {
-        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setRedisManager(getRedisManager());
-        return redisSessionDAO;
-    }
-
-    @Bean(name = "cacheManager")
-    public RedisCacheManager getCacheManager() {
-        RedisCacheManager cacheManager = new RedisCacheManager();
-        cacheManager.setRedisManager(getRedisManager());
-        return cacheManager;
     }
 
     @Bean(name = "shiroCacheManager")

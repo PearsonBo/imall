@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @Date: 2019-05-21 17:18
  */
 @InterfaceDesc("缓存服务")
-interface RedisService {
+public interface RedisService {
 
     /**
      * 批量删除

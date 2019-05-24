@@ -1,6 +1,7 @@
 package com.bo.imall.relam;
 
-import com.bo.imall.model.OperatorVo;
+import com.bo.imall.model.admin.AdminUser;
+import com.bo.imall.model.admin.AdminUserVo;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -29,9 +30,9 @@ public class LdapAndDbCredentialMatcher extends HashedCredentialsMatcher {
         }
 
         LOG.debug("Credentials 以 Object 形式传递");
-        OperatorVo operator = (OperatorVo) info.getCredentials();
+        AdminUser adminUser = (AdminUser) info.getCredentials();
 
-        if (checkPassword(loginName, password, operator)) {
+        if (checkPassword(loginName, password, adminUser)) {
             // 刷新最近登录时间、最近尝试登陆时间、清除密码错误次数
             LOG.info("密码验证成功");
             return true;
@@ -42,8 +43,9 @@ public class LdapAndDbCredentialMatcher extends HashedCredentialsMatcher {
         }
     }
 
-    private boolean checkPassword(String loginName, String password, OperatorVo operator) {
-        return loginName.equals(operator.getLoginName()) && password.equals(operator.getPassword());
+    private boolean checkPassword(String loginName, String password, AdminUser adminUser) {
+        // TODO: 2019-05-24 密码加密校验
+        return loginName.equals(adminUser.getUsername()) && password.equals(adminUser.getPassword());
     }
 
 }

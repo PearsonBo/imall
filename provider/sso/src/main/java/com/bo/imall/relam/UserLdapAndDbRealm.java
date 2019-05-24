@@ -1,11 +1,17 @@
 package com.bo.imall.relam;
 
-import com.bo.imall.helper.SecurityRedisHelper;
-import com.bo.imall.model.OperatorVo;
-import com.bo.imall.service.OperationService;
+import com.bo.imall.dao.AdminUserDao;
+import com.bo.imall.helper.ShiroRedisHelper;
+import com.bo.imall.model.admin.AdminUser;
+import com.bo.imall.model.admin.AdminUserSo;
+import com.bo.imall.model.admin.AdminUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -23,10 +29,10 @@ public class UserLdapAndDbRealm extends AuthorizingRealm {
     private static final String REALM_NAME = "userLdapAndDbRealm";
 
     @Autowired
-    private OperationService operationService;
+    private ShiroRedisHelper shiroRedisHelper;
 
     @Autowired
-    private SecurityRedisHelper securityRedisHelper;
+    private AdminUserDao adminUserDao;
 
     @Override
     public String getName() {
@@ -54,9 +60,13 @@ public class UserLdapAndDbRealm extends AuthorizingRealm {
 
         String sessionId = subject.getSession().getId().toString();
 
-        OperatorVo operator = securityRedisHelper.getOperator(sessionId);
-        Set<String> roles = securityRedisHelper.getRoles(sessionId, operator.getId());
-        Set<String> perms = securityRedisHelper.getPerms(sessionId, operator.getId());
+        AdminUserVo adminUserVo = shiroRedisHelper.getOperator(sessionId);
+        if (adminUserVo == null) {
+            throw new IncorrectCredentialsException("系统中不存在该用户，请联系管理员维护");
+        }
+
+        Set<String> roles = shiroRedisHelper.getRoleList(sessionId, adminUserVo.getId());
+        Set<String> perms = shiroRedisHelper.getPermList(sessionId, adminUserVo.getId());
 
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.setRoles(roles);
@@ -73,15 +83,15 @@ public class UserLdapAndDbRealm extends AuthorizingRealm {
             throw new IncorrectCredentialsException();
         }
 
-        // 根据用户名从数据库查询用户
-        OperatorVo operator = operationService.findVoByLoginName(operatorName);
-
-        if (operator == null) {
+        AdminUserSo adminUserSo = new AdminUserSo();
+        adminUserSo.setUsername(operatorName);
+        AdminUser adminUser = adminUserDao.findBoBySo(adminUserSo);
+        if (adminUser == null) {
             throw new IncorrectCredentialsException("系统中不存在该用户，请联系管理员维护");
         }
 
         // 交给 CredentialMatcher 进行密码匹配
-        return new SimpleAuthenticationInfo(operator.getLoginName(), operator, REALM_NAME);
+        return new SimpleAuthenticationInfo(adminUser.getUsername(), adminUser, REALM_NAME);
     }
 
 }

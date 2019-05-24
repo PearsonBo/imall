@@ -1,0 +1,8 @@
+permission:
+  permissionInfo:
+    commonPermissionList:
+      - prefix: /rest/test
+    specificPermissionList:
+      - url: /rest/go
+        perms: /rest/go
+        roles:

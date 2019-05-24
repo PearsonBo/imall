@@ -122,6 +122,11 @@
         = #{id}
     </select>
 
+    <select id="findBoBySo" resultMap="AdminUserResultMap">
+        select * from t_admin_user t
+        <include refid="soSqlFilter"/>
+    </select>
+
     <select id="findVo" resultMap="AdminUserVoResultMap">
         select * from t_admin_user where
         id = #{id}
